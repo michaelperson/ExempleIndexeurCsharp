@@ -10,12 +10,12 @@ namespace ExempleIndexeurCsharp
     /// Classe représentant une recette de cuisine avec ses ingrédients
     /// Utilise un indexeur pour accéder aux ingrédients par index
     /// </summary>
-    public class Recette
+    public class RecetteOk
     {
         // Champs privés pour stocker les données de la recette
         private string _nom;
         private string _description;
-        private List<string> _ingredients=new();
+        private Dictionary<int,string> _ingredients = new();
 
         /// <summary>
         /// Propriété pour accéder au nom de la recette
@@ -60,7 +60,7 @@ namespace ExempleIndexeurCsharp
         }
 
         /// <summary>
-        /// Indexeur permettant d'accéder aux ingrédients par leur position dans la liste
+        /// Indexeur permettant d'accéder aux ingrédients par leur position dans le dictionnaire
         /// </summary>
         /// <param name="index">L'index de l'ingrédient à récupérer ou modifier</param>
         /// <returns>L'ingrédient à la position spécifiée</returns>
@@ -68,7 +68,7 @@ namespace ExempleIndexeurCsharp
         {
             get
             {
-                // Vérification que la liste existe et que l'index est valide
+                // Vérification que le dictionnaire existe et que l'index est valide
                 if (_ingredients == null || index < 0 || index >= _ingredients.Count)
                 {
                     return null; // Retourne null si l'accès n'est pas valide
@@ -78,26 +78,27 @@ namespace ExempleIndexeurCsharp
             set
             {
                 // Initialise la liste si elle n'existe pas encore
-                _ingredients = _ingredients ?? new List<string>();
+                _ingredients = _ingredients ?? new Dictionary<int, string>();
 
                 // Vérifie si l'ingrédient existe déjà dans la liste pour éviter les doublons
-                if (_ingredients.Contains(value))
+                if (_ingredients.ContainsValue(value))
                 {
                     Console.WriteLine("Attention : Cet ingrédient est déjà présent dans la recette !");
                     return; // Sort de la méthode sans ajouter le doublon
                 }
 
-                // S'assure que la liste a suffisamment d'éléments pour l'index demandé
-                while (_ingredients.Count <= index)
+                // S'assure que l'index n'est pas encore utilisé
+                while (_ingredients.ContainsKey(index))
                 {
-                    _ingredients.Add(string.Empty); // Ajoute des chaînes vides pour combler les trous
+                    Console.WriteLine("Attention : cet index est déjà utilisé!");
+                    return; // Sort de la méthode  
                 }
 
                 // Assigne la nouvelle valeur à l'index spécifié
-                _ingredients[index] = value;
+                _ingredients.Add(index, value);
             }
         }
 
-         
+
     }
 }
